@@ -14,6 +14,10 @@ def 함수이름(입력값) :
 #turtle 라이브러리를 사용하는 방법
 import turtle as t
 import random
+
+score = 0
+isPlay = False
+
 devil = t.Turtle()
 devil.shape("turtle")
 devil.color("aquamarine")
@@ -30,25 +34,56 @@ feed.goto(-200,-100)
 
 def turn_right() :
     t.setheading(0)
+    
 def turn_left() :
     t.setheading(180)
+    
 def turn_up() :
     t.setheading(90)
+    
 def turn_down() :
     t.setheading(270)
+    
+def start() :
+    global isPlay
+    if isPlay == False :
+        isPlay = True
+        t.clear()
+        play()
+        
 def play():
+    global score
+    global isPlay
     t.forward(10)
     ang = devil.towards(t.pos())
     devil.setheading(ang)
     devil.forward(7)
-
+     # 악당한테 잡혔을 때
     if t.distance(feed) < 12 :
+        score = score + 1
+        t.write(score)
         feed_x = random.randint(-230,230)
         feed_y = random.randint(-230,230)
         feed.goto(feed_x,feed_y)
+
+      #악당한테 잡혔을 때
+    if t.distance(devil) < 12:
+        text = "score :" + str(score)
+        messege("game Over",text)
+        isPlay = False
+        score = 0
         
-    if t.distance(devil) >= 12:
+      #게임 지속 조건
+    if isPlay :
         t.ontimer(play,100)
+        
+def messege(m1,m2) :
+         t.clear()
+         t.goto(0,100)
+         t.write(m1, False,"center",("",20))
+         t.goto(0,-100)
+         t.write(m2,False, "center",("",15))
+         t.home()
         
 t.setup(500,500)
 t.bgcolor("coral")
@@ -61,8 +96,9 @@ t.onkeypress(turn_right,"Right")
 t.onkeypress(turn_left,"Left")
 t.onkeypress(turn_up,"Up")
 t.onkeypress(turn_down,"Down")
+t.onkeypress(start,"space")
 t.listen()
-play()
+messege("Turtlerun","[space]")
 
 
 
